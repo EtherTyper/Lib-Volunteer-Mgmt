@@ -1,0 +1,53 @@
+{% extends "navbar-layout.html" %} {% block body-content %}
+
+<style>
+	body {
+		padding-top: 70px;
+	}
+</style>
+
+
+<div class="row">
+	<div class="col-md-6 col-xs-12">
+		<div class='table-responsive'>
+			<table class='table table-bordered'>
+				<h3> List of Unapproved users </h3>
+				<thead>
+					<th>Name</th>
+					<th>Email</th>
+				</thead>
+				{% for usr in results['not-approved'] %}
+				<tr>
+					<td>
+						<a style="font-size: 15px" href="/getusrdetails/{{usr.id}}">
+				{{usr.name}}</a></td>
+					<td>{{usr.email}}</td>
+				</tr {% endfor %} </table>
+		</div>
+	</div>
+</div>
+
+
+<div class="row">
+	<div class="col-md-6 col-xs-12">
+		<div class='table-responsive'>
+			<table class='table table-bordered'>
+				<h3> List of Approved users </h3>
+				<thead>
+					<th>Name</th>
+					<th>Access</th>
+					<th>Email</th>
+				</thead>
+				{% for usr in results['approved'] %}
+				<tr>
+					<td>
+						<a style="font-size: 15px" href="/getusrdetails/{{usr.id}}">
+				{{usr.name}}</a></td>
+				  <td>{{usr.access}} </td>
+					<td>{{usr.email}}</td>
+				</tr {% endfor %} </table>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

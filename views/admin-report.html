@@ -1,0 +1,35 @@
+{% extends "navbar-layout.html" %}
+
+{% block body-content %}
+
+<div class="row">
+	<div class="col-md-6 col-xs-12">
+	<form action="/generatereport">
+	<h4>Volunteer name:</h4>
+	<input id="volunteer-name" name="name">
+	<h4> Enter start and end dates for report</h4>
+
+	<div class="input-daterange input-group" id="datepicker">
+	    <input type="text" class="input-sm form-control" name="start" />
+	    <span class="input-group-addon">to</span>
+	    <input type="text" class="input-sm form-control" name="end" />
+	</div>
+
+	<button class="btn btn-default" type="submit">submit</button>
+</form>
+</div>
+</div>
+
+<script src="moment/moment-min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.min.js"></script>
+<script>
+	$( "#volunteer-name" ).autocomplete({
+  	source: "/getusers"
+  });
+
+  $('#datepicker').datepicker({
+		autoclose:true
+  });
+</script>
+
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "navbar-layout.html" %}
+
+{% block body-content %}
+
+<!-- Responsive calendar - START -->
+<div class="responsive-calendar">
+    <div class="controls">
+        <button class="btn btn-default" id="prev" href="#" role="button">Prev</button>
+        <h4><span data-head-year></span> <span data-head-month></span></h4>
+        <button class="btn btn-default" id="next" type="submit">Next</button>
+        <button class="btn btn-default" id="current" type="submit">Current</button>
+    </div>
+    <hr/>
+    <div class="day-headers">
+        <div class="day header">Sun</div>
+        <div class="day header">Mon</div>
+        <div class="day header">Tue</div>
+        <div class="day header">Wed</div>
+        <div class="day header">Thu</div>
+        <div class="day header">Fri</div>
+        <div class="day header">Sat</div>
+    </div>
+    <div class="days" data-group="days">
+    </div>
+</div>
+<!-- Responsive calendar - END -->
+
+<script type="text/javascript" src="/calendar-app.js"></script>
+
+{% endblock %}

@@ -1,0 +1,141 @@
+{% extends "navbar-layout.html" %} {% block body-content %}
+
+<div class='row'>
+	<div class='col-md-6 col-xs-12'>
+		<h3> Schedule Request Form  for  {{result.month}}/{{result.day}}/{{result.yr}}, {{dayofweek}}</h3>
+	</div>
+</div>
+
+{% if admin %}
+<div class='row'>
+	<div class='col-md-6 col-xs-12'>
+		<div class="form-group">
+			<h4>Volunteer name:</h4>
+			<input id="volunteer-name" name="username">
+		</div>
+	</div>
+</div>
+{% endif %}
+
+<div class='row'>
+	<div class='col-md-6 col-xs-12'>
+		<span id="yr" value="{{result.yr}}"></span>
+		<span id="month" value="{{result.month}}"></span>
+		<span id="day" value="{{result.day}}"></span>
+		<div class="form-group">
+			<label for="timeslots"> Time Slot(s) </label><br> {% set idx = 0 %}
+			<div class='table-responsive'>
+				<table class='table'>
+					{% for slot in result.tn %}
+					<label class="checkbox-inline">
+       <!-- <p> idx = {{idx}} </p> -->
+					<!-- Emails are unique, but display only usernames -->
+         {% if status[idx] %}
+				 <tr>
+         		<td><input type="checkbox" name="timeslot"  value="{{idx}}"></td>
+						<td>{{ slot }}</td>
+						<td>{{ result.ts[idx] }}</td>
+			   </tr>
+         {% else %}
+				 <tr>
+         	  <td><input type="checkbox" name="timeslot"  value="{{idx}}" disabled></td>
+						<td>{{ slot }}</td>
+						<td class='danger' >{{ result.ts[idx] }} ::Slot full</td>
+				 </tr>
+         {% endif %}
+      </label> {% set idx = idx + 1 %} {% endfor %}
+				</table>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label>Repeat every {{dayofweek}} until:</label>
+			<div id="datepicker" class="input-group date" data-provide="datepicker">
+				<input id='enddate' name="enddate" type="text" class="form-control">
+				<div class="input-group-addon">
+					<span class="glyphicon glyphicon-th"></span>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+<div class='row'>
+	<div class='col-md-6 col-xs-12'>
+		<button id="add-schedule" class="btn btn-default">Submit Schedule Request</button>
+	</div>
+</div>
+
+<div class='row'>
+	<div class='col-md-6 col-xs-12'>
+		<div class='checkbox'>
+		<button id="del-schedule" class="btn btn-default">Delete Schedule</button>
+		<label><input type="checkbox" name="emailenable" value="yes">Send Email</label>
+	</div>
+	</div>
+</div>
+
+<div class='row'>
+	<div class='col-md-6 col-xs-12'>
+		<a class="btn btn-default" href="/responsivecalendar?year={{result.yr}}&month={{result.month}}">Cancel</a>
+	</div>
+</div>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.min.js"></script>
+<!-- bootbox modal helper class
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
+-->
+<script>
+	$(document).ready(function() {
+
+		$("#volunteer-name").autocomplete({
+			source: "/getusers"
+		});
+
+		//Read form inputs
+		function getInputs() {
+			var tsList = $('input[name=timeslot]:checked').map(function() {
+				return this.value;
+			}).get();
+
+			var queryparam = {
+				year: $('#yr').attr('value'),
+				month: $('#month').attr('value'),
+				day: $('#day').attr('value'),
+				ts: tsList,
+				enddate: $('#enddate').val(),
+				emailenable: $('input[name=emailenable]:checked').val()
+			}
+			{% if admin %}
+			queryparam['username'] = $('#volunteer-name').val();
+			{% endif %}
+			return queryparam;
+		}
+
+		$('input[name=timeslot]:checked').click(function() {
+			alert($(this).val());
+		});
+
+		$('#add-schedule').click(function() {
+			window.location = '/process_libraryschedule?' + $.param(getInputs());
+		});
+
+		$('#del-schedule').click(function() {
+			window.location = '/delete_libraryschedule?' + $.param(getInputs());
+		});
+
+		//Datepicker month is from 0 to 11, so subtract 1
+		var datepickermonth = parseInt($('#month').attr('value'));
+		datepickermonth--;
+		$('#datepicker').datepicker({
+			autoclose: true,
+			defaultViewDate: {
+				'year': parseInt($('#yr').attr('value')),
+				'month': datepickermonth
+			}
+		});
+	});
+</script>
+
+{% endblock %}

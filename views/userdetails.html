@@ -1,0 +1,63 @@
+{% extends "navbar-layout.html" %}
+
+{% block body-content %}
+
+<div class="container">
+	<style>
+		body {
+			padding-top: 70px;
+		}
+	</style>
+
+	<div class='row'>
+		<div class="col-md-6 col-xs-12">
+
+			{% if user.admin %}
+			<h3> Admin Details </h3> {% else %}
+			<h3> User Details </h3> {% endif %}
+		</div>
+
+		<div class='row'>
+			<div class="col-md-6 col-xs-12">
+				<p> Name: {{user.name}}</p>
+			</div>
+		</div>
+
+		<div class='row'>
+			<div class="col-md-6 col-xs-12">
+
+				<p>Email: {{user.email}} </p>
+			</div>
+		</div>
+
+
+		<div class='row'>
+			<div class="col-md-6 col-xs-12">
+
+				<p>Telephonenumber: {{user.telephonenumber}} </p>
+				<div>
+				</div>
+
+				{% if !user.admin %}
+				<div class='row'>
+					<div class="col-md-6 col-xs-12">
+
+						{% if user.approved %}
+						<a class="btn btn-danger" href="/getprocess_approval/{{user.id}}?approve=no"> Revoke Approval</a></p>
+						{% else %}
+						<a class="btn btn-success" href="/getprocess_approval/{{user.id}}?approve=yes"> Approve </a></p>
+						<a class="btn btn-danger" href="/getprocess_approval/{{user.id}}?approve=no"> Disapprove</a></p>
+						{% endif %}
+					</div>
+				</div>
+
+				{% endif %}
+
+				<div class='row'>
+					<div class="col-md-6 col-xs-12">
+						<a class="btn btn-primary" href="/listusers"> Back</a></p>
+					</div>
+				</div>
+			</div>
+
+			{% endblock %}

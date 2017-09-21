@@ -1,0 +1,140 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h2>Library Volunteer Signup Form</h2>
+
+{% if errors.length %}
+<div class='row' >
+  <div class='col-md-4' >
+    <ul>
+  {% for error in errors %}
+    <li style='color:grey'>{{ error }}</li>
+  {% endfor %}
+  </ul>
+ </div>
+</div>
+{% endif %}
+
+<form method="post" id="form">
+  <div class="form-group">
+    <div class='row'>
+      <div class='col-md-4'>
+        <label for="exampleInputName">First Name </label>
+        <input type="text" class="form-control" name="fname"  placeholder="First ">
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class='row'>
+      <div class='col-md-4'>
+        <label for="exampleInputName">Last Name </label>
+        <input type="text" class="form-control" name="lname"  placeholder="Last ">
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class='row'>
+      <div class='col-md-4'>
+        <label for="exampleInputEmail"> Email </label>
+        <input type="text" class="form-control" name="email"  placeholder="Email">
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="row">
+      <div class='col-md-4'>
+        <label for="exampleInputTelephonenumber"> Telephone Number</label>
+        <input type="text" class="form-control" name="telephonenumber"  placeholder="only numbers, omit - or ( )">
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="row">
+      <div class='col-md-4'>
+        <label for="gradyear">Graduation Year</label>
+        <input type="text" class="form-control" name="graduationyear"  placeholder="number">
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="row">
+      <div class='col-md-4'>
+        <label for="age">Age</label>
+        <input type="text" class="form-control" name="age"  placeholder="number">
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="row">
+      <div class='col-md-4'>
+        <label for="grade">Grade</label>
+        <input type="text" class="form-control" name="grade"  placeholder="number">
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="row">
+      <div class='col-md-4'>
+        <label for="gender">Gender</label>
+        <label class="radio-inline"><input type="radio" name="gender" value="male">Male</label>
+        <label class="radio-inline"><input type="radio" name="gender" value="female">Female</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="row">
+      <div class='col-md-4'>
+        <label for="exampleInputPassword"> Password </label>
+        <input type="password" id='password' class="form-control" name="password"  placeholder="Password">
+        <span id='message-len'></span>
+      </div>
+    </div>
+  </div>
+
+    <div id='reenter-password-form' class="form-group">
+      <div class="row">
+        <div class='col-md-4'>
+          <label for="exampleInputPassword">Re-enter Password </label>
+          <input type="password" id='confirm_password' class="form-control" placeholder="Re-enter Password">
+          <span id='message-match'></span>
+        </div>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-default" id="submitbutton"> Submit Info </button>
+
+</form>
+
+<script>
+$( document ).ready( function() {
+    var MIN_PASSWORD_LENGTH = 4;
+    $('#submitbutton').hide();
+    $('#reenter-password-form').hide();
+    $('#password').on('keyup', function () {
+      if ( $(this).val().length < MIN_PASSWORD_LENGTH ) {
+        $('#message-len').html('Too short < '+ MIN_PASSWORD_LENGTH + ' characters').css('color','red');
+        $('#submitbutton').hide();
+        $('#reenter-password-form').hide();
+      }
+      else {
+        $('#reenter-password-form').show();
+        $('#message-len').html('length ok').css('color','green');
+      }
+    });
+    $('#confirm_password').on('keyup', function () {
+        if ($(this).val() == $('#password').val()) {
+            $('#message-match').html('matching').css('color', 'green');
+            $('#submitbutton').show();
+        } else {
+          $('#message-match').html('not matching').css('color', 'red');
+          $('#submitbutton').hide();
+        }
+    });
+  });
+</script>
+
+{% endblock %}

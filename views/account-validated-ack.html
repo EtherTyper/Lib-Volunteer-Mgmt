@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<h3> Hello {{user.name}}, your account with email ( {{ user.email }} ) has been validated</h3>
+<p> Your account will be sent to the Volunteer
+		administrator for approval.
+ </p>
+
+<a class='btn btn-default' href='/login'>Back To Login</a>
+
+{% endblock %}

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title> {{ title }}</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!--	<link type = "text/css" rel="stylesheet" href = "stylesheets/login.css" /> -->
+	<link href='http://fonts.googleapis.com/css?family=Economica' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.min.css" />
+	<link href="/responsive-calendar/0.9/css/responsive-calendar.css" rel="stylesheet">
+	<!--  offset body from top because of fixed navbar -->
+	<style>
+		body { padding-top: 70px; }
+	</style>
+</head>
+
+<body>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script src="http://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="/responsive-calendar/0.9/js/responsive-calendar.js"></script>
+
+	<div class="container">
+
+
+		{% if messages.error %}
+		<div class="row">
+			<div class="col-md-6 col-xs-12">
+				<div class="alert alert-danger">
+					<div>{{ messages.error }}</div>
+				</div>
+			</div>
+		</div>
+		{% endif %}
+		{% if messages.info %}
+		<div class="row">
+			<div class="col-md-6 col-xs-12">
+				<div class="alert alert-info">
+					<div>{{ messages.info }}</div>
+				</div>
+			</div>
+		</div>
+		{% endif %}
+		{% if messages.success %}
+		<div class="row">
+			<div class="col-md-6 col-xs-12">
+				<div class="alert alert-success">
+					<div>{{ messages.success }}</div>
+				</div>
+			</div>
+		</div>
+		{% endif %}
+
+		{% block content %}{% endblock %}
+
+	</div>
+
+</body>
+
+</html>

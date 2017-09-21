@@ -1,0 +1,137 @@
+{% extends "navbar-layout.html" %} {% block body-content %}
+
+<input id="inputdate" type=hidden year="{{year}}" month="{{month}}" date="{{date}}">
+
+<div class="row">
+	<button id="prev" class="btn btn-default">Prev</button>
+	<button id="today" class="btn btn-default">Today</button>
+	<button id="next" class="btn btn-default">Next</button>
+</div>
+
+<div class="row">
+	<div class="col-md-6 col-xs-12">
+		<h3> Date: {{year}}/{{month}}/{{date}} ({{dayofweek}}) </h3>
+
+		<h3> Time Slot(s) </h3> {% set idx = 0 %} {% for slot in result.slotname %}
+
+		<h4>{{slot}}</h4>
+
+		<div class='table-responsive'>
+			<table class='table table-bordered'>
+				<thead>
+					<th>User</th>
+					<th>Check-In</th>
+				</thead>
+				{% for info in result.slotinfo[slot] %}
+
+				<tr>
+					<td>{{info.name}}</td>
+
+					{% if info.completed %}
+					<td>
+						<button choose="yes" slot="{{slot}}" usr="{{info.name}}" type="button" class="btn btn-success btn-sm">
+							<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+			</button>
+					</td>
+					{% else %}
+					<td>
+						<button choose="yes" slot="{{slot}}" usr="{{info.name}}" year="{{year}}" month="{{month}}" date="{{date}}" type="button" class="btn btn-danger btn-sm">
+							<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+				</button>
+					</td>
+					{% endif %}
+				</tr>
+
+				{% endfor %}
+			</table>
+		</div>
+
+		{% endfor %}
+	</div>
+</div>
+
+<script src="moment/moment-min.js"></script>
+<!-- javascript to update db using ajax call for checkin -->
+<script>
+	$(document).ready(function() {
+
+		var inputdate = $('#inputdate');
+		var year = inputdate.attr('year');
+		var month = inputdate.attr('month');
+		var date = inputdate.attr('date');
+		var datestring = year + '/' + month + '/' + date;
+
+		$('#prev').click(function() {
+			var nd = moment(datestring, "YYYY-MM-DD").subtract(1, 'day');
+			window.location = '/adminpage?' + $.param({
+				year: nd.get('year'),
+				month: nd.get('month') + 1,
+				day: nd.get('date')
+			});
+		});
+
+		$('#next').click(function() {
+			var nd = moment(datestring, "YYYY-MM-DD").add(1, 'day');
+			window.location = '/adminpage?' + $.param({
+				year: nd.get('year'),
+				month: nd.get('month') + 1,
+				day: nd.get('date')
+			});
+		});
+
+		$('#today').click(function() {
+			var nd = moment(); //get today
+			window.location = '/adminpage?' + $.param({
+				year: nd.get('year'),
+				month: nd.get('month') + 1,
+				day: nd.get('date')
+			});
+		});
+
+		$('button[choose="yes"]').click(function() {
+			var dbquery = {
+				datestring: datestring,
+				name: $(this).attr('usr'),
+				slot: $(this).attr('slot')
+			};
+
+			//If button is green, already been confirmed
+			//so toggle
+			if ($(this).hasClass('btn-success')) {
+				dbquery['confirm'] = 'no';
+				confirmHours('no', $.param(dbquery), $(this));
+			} else
+			if ($(this).hasClass('btn-danger')) {
+				dbquery['confirm'] = 'yes';
+				confirmHours('yes', $.param(dbquery), $(this));
+			}
+		});
+
+		var confirmHours = function(confirm, param, obj) {
+			$.ajax({
+				url: "/confirmhours?" + param,
+				async: false,
+				dataType: "json",
+
+				success: function(json) {
+					console.log("call confirmhours: " + json.status);
+					//refreshView();
+					if (confirm == 'yes') {
+						obj.toggleClass("btn-danger");
+						obj.addClass("btn-success");
+					}
+					if (confirm == 'no') {
+						obj.toggleClass("btn-success");
+						obj.addClass("btn-danger");
+					}
+				},
+				error: function(xhr, status) {
+					alert("confirmhours failed");
+				}
+			});
+		};
+
+	});
+</script>
+
+{% endblock %}
